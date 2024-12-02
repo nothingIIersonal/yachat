@@ -1,0 +1,289 @@
+--------------------------------
+COMMANDS:
+--------------------------------
+- 0 => REGISTER    (client -> server)
+- 1 => LOGIN       (client -> server)
+- 2 => SENDMSG     (client -> server)
+- 3 => GETMSG      (client -> server)
+- 4 => NOTIFY      (server -> client)
+- 5 => LOGOUT      (client -> server)
+- 6 => STATUS      (server -> client)
+- 7 => AUTH        (server -> client)
+- 8 => MSGS        (server -> client)
+
+
+--------------------------------
+REGISTER:
+--------------------------------
+Request:
+{
+  "header": {
+    "command": "0"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user4",
+      "password": "user4pass"
+    }
+  }
+}
+
+{   "header": {     "command": "0"   },   "payload": {     "auth_data": {       "username": "user4",       "password": "user4pass"     }   } } 
+
+Response (OK):
+{
+  "header": {
+    "command": "6",
+    "status": "0",
+    "msg": "Success"
+  }
+}
+
+Response (FAIL):
+{
+  "header": {
+    "command": "6",
+    "status": "1",
+    "msg": "Failed"
+  }
+}
+
+
+--------------------------------
+LOGIN:
+--------------------------------
+Request:
+{
+  "header": {
+    "command": "1"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user4",
+      "password": "user4pass"
+    }
+  }
+}
+
+{   "header": {     "command": "1"   },   "payload": {     "auth_data": {       "username": "user4",       "password": "user4pass"     }   } } 
+{   "header": {     "command": "1"   },   "payload": {     "auth_data": {       "username": "user1",       "password": "user1pass"     }   } } 
+
+Response (OK):
+{
+  "header": {
+    "command": "7",
+    "status": "0",
+    "msg": "Success"
+  },
+  "payload": {
+    "auth_data": {
+      "session_id": "BEJT^`K_P`CTUZj]Y"
+    }
+  }
+}
+
+Response (FAIL):
+{
+  "header": {
+    "command": "6",
+    "status": "1",
+    "msg": "Failed"
+  }
+}
+
+
+--------------------------------
+LOGOUT:
+--------------------------------
+Request:
+{
+  "header": {
+    "command": "5"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user1",
+      "session_id": "WIEKPHXN[]FGSSiOD"
+    }
+  }
+}
+
+{   "header": {     "command": "5"   },   "payload": {     "auth_data": {       "username": "user4",       "session_id": "WIEKPHXN[]FGSSiOD"     }   } }
+
+Response (OK):
+{
+  "header": {
+    "command": "6",
+    "status": "0",
+    "msg": "Success"
+  }
+}
+
+Response (FAIL):
+{
+  "header": {
+    "command": "6",
+    "status": "1",
+    "msg": "Failed"
+  }
+}
+
+
+--------------------------------
+SENDMSG:
+--------------------------------
+Request:
+{
+  "header": {
+    "command": "2"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user4",
+      "session_id": "WIEKPHXN[]FGSSiOD"
+    },
+    "target": {
+      "username": "user1",
+      "message": "Hi! How are you?"
+    }
+  }
+}
+
+{   "header": {     "command": "2"   },   "payload": {     "auth_data": {       "username": "user4",       "session_id": "H]`[QiV]g^CC^bJXG"     },     "target": {       "username": "user1",       "message": "ka4ok"     }   } }
+{   "header": {     "command": "2"   },   "payload": {     "auth_data": {       "username": "user1",       "session_id": "EacF]EhcIcDQBfVJO"     },     "target": {       "username": "user4",       "message": "4o nado lol??"     }   } }
+
+Response (OK):
+{
+  "header": {
+    "command": "6",
+    "status": "0",
+    "msg": "Success"
+  }
+}
+
+Response (FAIL):
+{
+  "header": {
+    "command": "6",
+    "status": "1",
+    "msg": "Failed"
+  }
+}
+
+*check for active connection with target*
+
+Request (from server to target):
+{
+  "header": {
+    "command": "4",
+    "status": "0",
+    "msg": "Notify"
+  },
+  "payload": {
+    "target": {
+      "username": "user4"
+    }
+  }
+}
+
+{   "header": {     "command": "4"   },   "payload": {     "target": {       "username": "user4"     }   } }
+
+*getmsgs to target sequence*
+
+
+--------------------------------
+GETMSGS:
+--------------------------------
+Request:
+{
+  "header": {
+    "command": "3"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user4",
+      "session_id": "AQIWTIESaYcGajaZf"
+    },
+    "target": {
+      "username": "user1"
+    }
+  }
+}
+
+Request (all):
+{
+  "header": {
+    "command": "9"
+  },
+  "payload": {
+    "auth_data": {
+      "username": "user4",
+      "session_id": "AQIWTIESaYcGajaZf"
+    }
+  }
+}
+
+{   "header": {     "command": "3"   },   "payload": {     "auth_data": {       "username": "user4",       "session_id": "AQIWTIESaYcGajaZf"     },     "target": {       "username": "user1"     }   } }
+{   "header": {     "command": "3"   },   "payload": {     "auth_data": {       "username": "user1",       "session_id": "EacF]EhcIcDQBfVJO"     },     "target": {       "username": "user4"     }   } }
+{   "header": {     "command": "9"   },   "payload": {     "auth_data": {       "username": "user4",       "session_id": "EacF]EhcIcDQBfVJO"     }   } }
+{   "header": {     "command": "9"   },   "payload": {     "auth_data": {       "username": "user1",       "session_id": "EZJORE_c__DVI]]cf"     }   } }
+
+Response (OK):
+{
+  "header": {
+    "command": "8",
+    "status": "0",
+    "msg": "Success"
+  },
+  "payload": {
+    "target": {
+      "username": "user1",
+      "messages": [
+        {"y": "Hi!"},
+        {"t": "and?"},
+        {"t": "closer to business..."},
+        {"y": "ur such a joker (:"}
+      ]
+    }
+  }
+}
+
+Response all (OK):
+{
+  "header": {
+    "command": "10",
+    "status": "0",
+    "msg": "Success"
+  },
+  "payload": {
+    "target": {
+      "all_messages": [
+        {
+          "username": "user1",
+          "messages": [
+            {"y": "Hi!"},
+            {"t": "and?"},
+            {"t": "closer to business..."},
+            {"y": "ur such a joker (:"}
+          ]
+        },
+        {
+          "username": "user2",
+          "messages": [
+            {"y": "hmm?"},
+            {"t": "mmh!"}
+          ]
+        }
+      ]
+    }
+  }
+}
+
+Response (FAIL):
+{
+  "header": {
+    "status": "1",
+    "msg": "Failed"
+  }
+}
+
